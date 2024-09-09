@@ -8,5 +8,5 @@ import models.Vehicle;
  * @author mdarmanansari
  */
 public interface SpotAllocationStrategy {
-    ParkingSpot getSpotForVehicle(ParkingLot parkingLot, Vehicle vehicle, int gateId);
+    ParkingSpot getSpotForVehicle(ParkingLot parkingLot, Vehicle vehicle);
 }

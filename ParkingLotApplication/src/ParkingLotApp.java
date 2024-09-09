@@ -79,10 +79,7 @@ public class ParkingLotApp {
                 System.out.println("Please enter the parkingLot ID");
                 int parkingLotId = sc.nextInt();
 
-                System.out.println("Please enter the gate ID");
-                int gateId = sc.nextInt();
-
-                Ticket ticket = ticketController.generateTicket(vehicle, gateId, parkingLotId);
+                Ticket ticket = ticketController.generateTicket(vehicle, parkingLotId);
                 System.out.println("Ticket details :" + ticket);
 
             } else if (option == 2) {

@@ -14,23 +14,22 @@ import java.util.List;
  */
 public class LinearSpotAllocationStrategy implements SpotAllocationStrategy {
     @Override
-    public ParkingSpot getSpotForVehicle(ParkingLot parkingLot, Vehicle vehicle, int gateId) {
-        int floorId = gateId / 1000;
-        ParkingFloor parkingFloor = parkingLot.getFloors().get(floorId - 1);
+    public ParkingSpot getSpotForVehicle(ParkingLot parkingLot, Vehicle vehicle) {
+        List<ParkingFloor> parkingFloors = parkingLot.getFloors();
 
-        if (parkingFloor != null) {
-            List<ParkingSpot> parkingSpots = parkingFloor.getParkingSpots();
-            if (parkingSpots != null && !parkingSpots.isEmpty()) {
-                for (ParkingSpot parkingSpot : parkingSpots) {
-                    if (parkingSpot.getParkingSpotStatus().equals(ParkingSpotStatus.EMPTY)
-                            && parkingSpot.getVehicleType().equals(vehicle.getVehicleType())) {
-                        return parkingSpot;
+        if (parkingFloors != null && !parkingFloors.isEmpty()) {
+            for (ParkingFloor parkingFloor : parkingFloors) {
+                List<ParkingSpot> parkingSpots = parkingFloor.getParkingSpots();
+                if (parkingSpots != null && !parkingSpots.isEmpty()) {
+                    for (ParkingSpot parkingSpot : parkingSpots) {
+                        if (parkingSpot.getParkingSpotStatus().equals(ParkingSpotStatus.EMPTY)
+                                && parkingSpot.getVehicleType().equals(vehicle.getVehicleType())) {
+                            return parkingSpot;
+                        }
                     }
                 }
             }
-
         }
-
         throw new ParkingSpotNotFoundForVehicle("Parking spot not found for vehicle");
     }
 }

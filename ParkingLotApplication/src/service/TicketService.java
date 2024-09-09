@@ -31,14 +31,17 @@ public class TicketService {
         this.parkingSpotRepository = parkingSpotRepository;
     }
 
-    public Ticket generateTicket(Vehicle vehicle, int gateId, int parkingLotId) {
+    public Ticket generateTicket(Vehicle vehicle, int parkingLotId) {
         SpotAllocationStrategy strategy = SpotAllocationStrategyFactory.getSpotAllocationStrategy(SpotAllocationStrategyName.NEAREST_SPOT_ALLOCATION_STRATEGY);
         ParkingLot parkingLot = parkingLotRepository.get(parkingLotId);
 
-        ParkingSpot allocatedSpot = strategy.getSpotForVehicle(parkingLot, vehicle, gateId);
+        ParkingSpot allocatedSpot = strategy.getSpotForVehicle(parkingLot, vehicle);
         allocatedSpot.setVehicle(vehicle);
         allocatedSpot.setParkingSpotStatus(ParkingSpotStatus.OCCUPIED);
         parkingSpotRepository.put(allocatedSpot);
+
+        int floorId = allocatedSpot.getNumber() / 100;
+        int gateId = (floorId * 1000) + 1;
 
         Ticket ticket = new Ticket();
         ticket.setVehicle(vehicle);
