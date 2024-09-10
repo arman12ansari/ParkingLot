@@ -2,10 +2,8 @@ package service.strategy.billCalculationStrategy;
 
 import models.Bill;
 import models.Gate;
-import models.ParkingLot;
 import models.Ticket;
 import models.enums.BillStatus;
-import repository.ParkingLotRepository;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -15,21 +13,18 @@ import java.time.temporal.ChronoUnit;
  */
 public class SurgeBillCalculationStrategy implements BillCalculationStrategy {
     @Override
-    public Bill generateBill(Ticket ticket, Gate gate, ParkingLot parkingLot, ParkingLotRepository parkingLotRepository) {
+    public Bill generateBill(Ticket ticket, Gate gate) {
         LocalDateTime exitTime = LocalDateTime.now();
 
-        long numberOfSeconds = ChronoUnit.SECONDS.between(exitTime, ticket.getEntryTime());
-
-        int totalCapacity = parkingLot.getCapacity();
-        int currentCapacity = parkingLotRepository.currentCapacity();
-
-        long surgeFactor = (long) currentCapacity / (long) totalCapacity;
+        long numberOfSeconds = ChronoUnit.SECONDS.between(ticket.getEntryTime(), exitTime);
 
         long amount = 0;
-        if (surgeFactor < 0.02) {
+        if (numberOfSeconds > 60) {
             amount = numberOfSeconds * 10;
+        } else if (numberOfSeconds > 30) {
+            amount = (numberOfSeconds * 10) + numberOfSeconds;
         } else {
-            amount = (numberOfSeconds * 10) + (numberOfSeconds * 10 * surgeFactor);
+            amount = (numberOfSeconds * 10) + (numberOfSeconds * 2);
         }
 
         Bill bill = new Bill();

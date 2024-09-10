@@ -1,11 +1,14 @@
+import controller.BillController;
 import controller.InitController;
+import controller.PaymentController;
 import controller.TicketController;
-import models.ParkingLot;
-import models.Ticket;
-import models.Vehicle;
+import exception.InvalidVehicleTypeException;
+import models.*;
 import models.enums.VehicleType;
 import repository.*;
+import service.BillService;
 import service.InitialisationService;
+import service.PaymentService;
 import service.TicketService;
 
 import java.util.Scanner;
@@ -22,6 +25,7 @@ public class ParkingLotApp {
         GateRepository gateRepository = new GateRepository();
         TicketRepository ticketRepository = new TicketRepository();
         BillRepository billRepository = new BillRepository();
+        PaymentRepository paymentRepository = new PaymentRepository();
 
         InitialisationService initialisationService = new InitialisationService(
                 gateRepository,
@@ -37,19 +41,33 @@ public class ParkingLotApp {
                 parkingSpotRepository
         );
 
-        TicketController ticketController = new TicketController(ticketService);
+        BillService billService = new BillService(
+                billRepository,
+                parkingLotRepository,
+                parkingSpotRepository,
+                ticketRepository,
+                gateRepository
+        );
 
+        PaymentService paymentService = new PaymentService(
+                paymentRepository,
+                billRepository
+        );
+
+        TicketController ticketController = new TicketController(ticketService);
         InitController initController = new InitController(initialisationService);
+        BillController billController = new BillController(billService);
+        PaymentController paymentController = new PaymentController(paymentService);
 
         System.out.println("*** PARKING LOT DATA INITIALISATION - START ***");
         ParkingLot parkingLot = initController.init();
         System.out.println("*** PARKING LOT DATA INITIALISATION - END ***");
 
-        System.out.println("Please enter an option: \n 1. Enter Parking Lot \n 2. Exit Parking Lot \n 3. Exit");
-        System.out.println("Enter your option : ");
-        int option = sc.nextInt();
-
         while (true) {
+            System.out.println("Please enter an option: \n 1. Enter Parking Lot \n 2. Exit Parking Lot \n 3. Exit");
+            System.out.println("Enter your option : ");
+            int option = sc.nextInt();
+
             if (option == 1) {
                 Vehicle vehicle = new Vehicle();
                 System.out.println("Welcome to our parking lot");
@@ -74,6 +92,8 @@ public class ParkingLotApp {
                     vehicle.setVehicleType(VehicleType.EV);
                 } else if (vehicleType == 4) {
                     vehicle.setVehicleType(VehicleType.LUXURY);
+                } else {
+                    throw new InvalidVehicleTypeException("Please Enter a valid vehicle type");
                 }
 
                 System.out.println("Please enter the parkingLot ID");
@@ -83,9 +103,21 @@ public class ParkingLotApp {
                 System.out.println("Ticket details :" + ticket);
 
             } else if (option == 2) {
-                // Bill Implementation
+                System.out.println("Please enter the Ticket ID");
+                int ticketId = sc.nextInt();
+                Bill bill = billController.generateBill(ticketId);
+
+                System.out.println("Bill details :" + bill);
+
+                System.out.println("How you want to Pay Bill \n 1. Cash \n 2. Card \n 3. UPI");
+                int paymentOption = sc.nextInt();
+
+                Payment payment = paymentController.makePayment(paymentOption, bill);
+
+                System.out.println("Payment details :" + payment);
+
             } else {
-                System.out.println("THANKS");
+                System.out.println("Thanks for Visiting " + parkingLot.getName());
                 break;
             }
         }

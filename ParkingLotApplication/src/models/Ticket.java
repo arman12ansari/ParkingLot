@@ -16,7 +16,7 @@ public class Ticket extends BaseModel {
     public String toString() {
         return "{" +
                 "\nticketId=" + getId() +
-                ",\nentryTime=" + DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(entryTime) +
+                ",\nentryTime=" + DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").format(entryTime) +
                 ",\nvehicleNumber=" + vehicle.getVehicleNumber() +
                 ",\nparkingSpot=" + parkingSpot.getNumber() +
                 ",\nentryGate=" + entryGate.getGateNumber() +

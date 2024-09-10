@@ -3,6 +3,7 @@ package models;
 import models.enums.BillStatus;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @author mdarmanansari
@@ -13,6 +14,17 @@ public class Bill extends BaseModel {
     private BillStatus status;
     private Ticket ticket;
     private Gate exitGate;
+
+    @Override
+    public String toString() {
+        return "{" +
+                "amount=" + amount +
+                ",\nexitTime=" + DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").format(exitTime) +
+                ",\nstatus=" + status +
+                ",\nticketId=" + ticket.getId() +
+                ",\nexitGate=" + exitGate.getGateNumber() +
+                "\n}";
+    }
 
     public LocalDateTime getExitTime() {
         return exitTime;

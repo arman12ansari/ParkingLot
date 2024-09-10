@@ -4,6 +4,7 @@ import models.enums.PaymentMode;
 import models.enums.PaymentStatus;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @author mdarmanansari
@@ -15,6 +16,18 @@ public class Payment extends BaseModel {
     private PaymentMode paymentMode;
     private Bill bill;
     private LocalDateTime paymentTime;
+
+    @Override
+    public String toString() {
+        return "{" +
+                "amount=" + amount +
+                ",\ntransactionRefNumber=" + transactionRefNumber +
+                ",\npaymentStatus=" + paymentStatus +
+                ",\npaymentMode=" + paymentMode +
+                ",\nbillId=" + bill.getId() +
+                ",\npaymentTime=" + DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").format(paymentTime) +
+                "\n}";
+    }
 
     public double getAmount() {
         return amount;

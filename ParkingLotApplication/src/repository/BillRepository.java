@@ -26,9 +26,18 @@ public class BillRepository {
         return bill;
     }
 
-    public void put(Bill bill) {
+    public Bill put(Bill bill) {
         bill.setId(++idCounter);
         billMap.put(bill.getId(), bill);
         System.out.println("Bill has been added successfully");
+
+        return billMap.get(bill.getId());
+    }
+
+    public Bill updateBill(Bill bill) {
+        billMap.put(bill.getId(), bill);
+        System.out.println("Bill has been updated successfully");
+
+        return billMap.get(bill.getId());
     }
 }

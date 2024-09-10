@@ -2,10 +2,8 @@ package service.strategy.billCalculationStrategy;
 
 import models.Bill;
 import models.Gate;
-import models.ParkingLot;
 import models.Ticket;
 import models.enums.BillStatus;
-import repository.ParkingLotRepository;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -15,7 +13,7 @@ import java.time.temporal.ChronoUnit;
  */
 public class SimpleBillCalculationStrategy implements BillCalculationStrategy {
     @Override
-    public Bill generateBill(Ticket ticket, Gate gate, ParkingLot parkingLot, ParkingLotRepository parkingLotRepository) {
+    public Bill generateBill(Ticket ticket, Gate gate) {
         LocalDateTime entryTime = ticket.getEntryTime();
         LocalDateTime exitTime = LocalDateTime.now();
 
