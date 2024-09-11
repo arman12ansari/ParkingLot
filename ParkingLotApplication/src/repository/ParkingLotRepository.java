@@ -31,8 +31,4 @@ public class ParkingLotRepository {
         parkingLotMap.put(parkingLot.getId(), parkingLot);
         System.out.println("ParkingLot has been added successfully");
     }
-
-    public int currentCapacity() {
-        return parkingLotMap.size();
-    }
 }
